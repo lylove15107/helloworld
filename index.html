@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>似水如風的个人小站，别期待</title>
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no" />
+    <script type="text/javascript" src="src/js/jquery-1.7.js"></script>
+    <link rel="stylesheet" href="src/css/MobileCommonCss.css">
+    <link rel="stylesheet" href="src/css/index.css">
+</head>
+<body>
+<div class="head">
+    <div class="nav-container">
+        <div class="nav">似水如風</div>
+    </div>
+</div>
+<div class="body">
+    <div class="search-container">
+        <div class="search-input">
+            <input type="text" class="search-word" placeholder="关关雎鸠">
+        </div>
+    </div>
+</div>
+<div class="footer"></div>
+
+<script>
+    $(function () {
+        var baseSize = $("html").css("font-size");
+        var setHeight = document.body.scrollHeight / parseInt(baseSize) - 3 - 3 + "rem";
+
+        init(setHeight);
+
+        $("body").on("change", ".search-word", function() {
+            var keyword = $(this).val();
+            console.log(keyword);
+
+            $.ajax({
+                type: "get",
+                async: false,
+                url: "http://flightQuery.com/jsonp/flightResult.aspx?code=CA1998",
+                dataType: "jsonp",
+                jsonp: "callback",//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback)
+                jsonpCallback:"flightHandler",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名，也可以写"?"，jQuery会自动为你处理数据
+                success: function(json){
+                    alert('您查询到航班信息：票价： ' + json.price + ' 元，余票： ' + json.tickets + ' 张。');
+                },
+                error: function(){
+                    alert('fail');
+                }
+            });
+
+            console.log("here")
+        });
+    })
+
+    function init(setHeight) {
+        $(".body").css("height", setHeight);
+    }
+</script>
+</body>
+</html>
